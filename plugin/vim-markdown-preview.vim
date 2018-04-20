@@ -26,7 +26,7 @@ if !exists("g:vim_markdown_preview_browser")
   if g:vmp_osname == 'mac'
     let g:vim_markdown_preview_browser = 'Safari'
   else
-    let g:vim_markdown_preview_browser = 'Google Chrome'
+    let g:vim_markdown_preview_browser = 'chromium'
   endif
 endif
 
@@ -71,24 +71,24 @@ function! Vim_Markdown_Preview()
     call system('markdown "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
   endif
   if v:shell_error
-    echo 'Please install the necessary requirements: https://github.com/JamshedVesuna/vim-markdown-preview#requirements'
+    echo 'Error: Please install the necessary requirements.'
   endif
 
   if g:vmp_osname == 'unix'
-    let chrome_wid = system("xdotool search --name 'vim-markdown-preview.html - " . g:vim_markdown_preview_browser . "'")
-    if !chrome_wid
+    let curr_wid = system('xdotool getwindowfocus')
+    let browser_wid = system("xdotool search --name 'vim-markdown-preview.html'")
+    if !browser_wid
       if g:vim_markdown_preview_use_xdg_open == 1
         call system('xdg-open /tmp/vim-markdown-preview.html 1>/dev/null 2>/dev/null &')
       else
-        call system('see /tmp/vim-markdown-preview.html 1>/dev/null 2>/dev/null &')
+        call system('"' . g:vim_markdown_preview_browser . '" /tmp/vim-markdown-preview.html 1>/dev/null 2>/dev/null &')
       endif
     else
-      let curr_wid = system('xdotool getwindowfocus')
-      call system('xdotool windowmap ' . chrome_wid)
-      call system('xdotool windowactivate ' . chrome_wid)
+      call system('xdotool windowmap ' . browser_wid)
+      call system('xdotool windowactivate ' . browser_wid)
       call system("xdotool key 'ctrl+r'")
-      call system('xdotool windowactivate ' . curr_wid)
     endif
+    call system('xdotool windowactivate ' . curr_wid)
   endif
 
   if g:vmp_osname == 'mac'
@@ -125,24 +125,24 @@ function! Vim_Markdown_Preview_Local()
     call system('markdown "' . b:curr_file . '" > vim-markdown-preview.html')
   endif
   if v:shell_error
-    echo 'Please install the necessary requirements: https://github.com/JamshedVesuna/vim-markdown-preview#requirements'
+    echo 'Error: Please install the necessary requirements.'
   endif
 
   if g:vmp_osname == 'unix'
-    let chrome_wid = system("xdotool search --name vim-markdown-preview.html - " . g:vim_markdown_preview_browser . "'")
-    if !chrome_wid
+    let curr_wid = system('xdotool getwindowfocus')
+    let browser_wid = system("xdotool search --name 'vim-markdown-preview.html'")
+    if !browser_wid
       if g:vim_markdown_preview_use_xdg_open == 1
         call system('xdg-open vim-markdown-preview.html 1>/dev/null 2>/dev/null &')
       else
-        call system('see vim-markdown-preview.html 1>/dev/null 2>/dev/null &')
+        call system('"' . g:vim_markdown_preview_browser . '" /tmp/vim-markdown-preview.html 1>/dev/null 2>/dev/null &')
       endif
     else
-      let curr_wid = system('xdotool getwindowfocus')
-      call system('xdotool windowmap ' . chrome_wid)
-      call system('xdotool windowactivate ' . chrome_wid)
+      call system('xdotool windowmap ' . browser_wid)
+      call system('xdotool windowactivate ' . browser_wid)
       call system("xdotool key 'ctrl+r'")
-      call system('xdotool windowactivate ' . curr_wid)
     endif
+    call system('xdotool windowactivate ' . curr_wid)
   endif
 
   if g:vmp_osname == 'mac'
