@@ -92,7 +92,7 @@ function! Vim_Markdown_Preview()
     else
       call system('xdotool windowmap ' . browser_wid)
       call system('xdotool windowactivate ' . browser_wid)
-      call system("xdotool key 'ctrl+r'")
+      call system("xdotool key 'F5'")
     endif
     call system('xdotool windowactivate ' . curr_wid)
   endif
